@@ -45,55 +45,65 @@ st.markdown("""
 /* ================= APEX PREMIUM TABS (IPO STYLE) ================= */
 
 /* Tabs wrapper spacing */
+div[data-testid="stTabs"],
 .stTabs{
-  margin-top:18px;
-  margin-bottom:14px;
+  margin-top:18px !important;
+  margin-bottom:14px !important;
 }
 
 /* Tabs container */
+div[data-testid="stTabs"] [data-baseweb="tab-list"],
 .stTabs [data-baseweb="tab-list"]{
-  display:flex;
-  gap:10px;
-  padding:8px;
+  display:flex !important;
+  width:100% !important;
+  gap:10px !important;
+  padding:8px !important;
   background:linear-gradient(
     180deg,
     rgba(255,255,255,0.05),
     rgba(255,255,255,0.02)
-  );
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:18px;
-  backdrop-filter:blur(14px);
+  ) !important;
+  border:1px solid rgba(255,255,255,0.12) !important;
+  border-radius:18px !important;
+  backdrop-filter:blur(14px) !important;
 }
 
 /* Individual tab */
+div[data-testid="stTabs"] [data-baseweb="tab"],
 .stTabs [data-baseweb="tab"]{
-  position:relative;
-  padding:12px 22px;
-  font-size:15px;
-  font-weight:700;
-  letter-spacing:0.3px;
-  color:#9ca3af;
-  background:transparent;
-  border-radius:14px;
-  transition:all 0.3s cubic-bezier(.22,1,.36,1);
+  flex: 1 1 0% !important;
+  justify-content: center !important;
+  text-align: center !important;
+  position:relative !important;
+  padding:12px 22px !important;
+  font-size:15px !important;
+  font-weight:700 !important;
+  letter-spacing:0.3px !important;
+  color:#9ca3af !important;
+  background:transparent !important;
+  border-radius:14px !important;
+  transition:all 0.3s cubic-bezier(.22,1,.36,1) !important;
 }
 
 /* Hover */
+div[data-testid="stTabs"] [data-baseweb="tab"]:hover,
 .stTabs [data-baseweb="tab"]:hover{
-  color:white;
-  background:rgba(255,255,255,0.06);
+  color:white !important;
+  background:rgba(255,255,255,0.06) !important;
 }
 
 /* Active tab */
+div[data-testid="stTabs"] [aria-selected="true"],
 .stTabs [aria-selected="true"]{
   color:white !important;
-  background:rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.08) !important;
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,0.30),
-    0 0 18px rgba(255,255,255,0.15);
+    0 0 18px rgba(255,255,255,0.15) !important;
 }
 
 /* Neon underline */
+div[data-testid="stTabs"] [aria-selected="true"]::after,
 .stTabs [aria-selected="true"]::after{
   content:"";
   position:absolute;
@@ -107,8 +117,11 @@ st.markdown("""
 }
 
 /* Remove default underline */
+div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
+div[data-testid="stTabs"] [data-baseweb="tab-border"],
+.stTabs [data-baseweb="tab-highlight"],
 .stTabs [data-baseweb="tab-border"]{
-  display:none;
+  display:none !important;
 }
 
 .page-title{
@@ -143,37 +156,23 @@ st.markdown("""
   background:rgba(255,255,255,0.10);
   color:#ffffff;
 }
-/* ================= EQUAL-WIDTH TABS ================= */
-
-/* Tab list container */
-.stTabs [data-baseweb="tab-list"]{
-  display: flex;
-  width: 100%;
-}
-
-/* Each tab takes equal space */
-.stTabs [data-baseweb="tab"]{
-  flex: 1 1 0%;
-  text-align: center;
-}
 /* ================= HARD KILL STREAMLIT TAB INDICATOR ================= */
 
-/* Kill BaseWeb animated indicator */
-.stTabs div[role="presentation"] {
-    display: none !important;
-    height: 0 !important;
-    background: transparent !important;
-}
-
-/* Extra safety: any leftover underline */
+div[data-testid="stTabs"] div[role="presentation"],
+div[data-testid="stTabs"] [data-baseweb="tab-border"],
+div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
+div[data-testid="stTabs"] [aria-hidden="true"],
+.stTabs div[role="presentation"],
 .stTabs [data-baseweb="tab-border"],
+.stTabs [data-baseweb="tab-highlight"],
 .stTabs [aria-hidden="true"] {
     display: none !important;
     background: transparent !important;
     height: 0 !important;
 }
 
-/* Ensure no bottom borders anywhere */
+div[data-testid="stTabs"],
+div[data-testid="stTabs"] *,
 .stTabs,
 .stTabs * {
     border-bottom: none !important;

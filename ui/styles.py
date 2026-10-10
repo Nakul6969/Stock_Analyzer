@@ -428,29 +428,63 @@ def load_global_css():
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important;
     }
 
-    /* Tabs */
+    /* Tabs (Compatible with both legacy .stTabs and latest div[data-testid="stTabs"]) */
+    div[data-testid="stTabs"],
+    .stTabs {
+      margin-top: 14px !important;
+      margin-bottom: 16px !important;
+    }
+
+    div[data-testid="stTabs"] [data-baseweb="tab-list"],
     [data-baseweb="tab-list"] {
+      display: flex !important;
+      width: 100% !important;
       gap: 8px !important;
       background: rgba(255, 255, 255, 0.02) !important;
       padding: 6px !important;
-      border-radius: 14px !important;
-      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      border-radius: 16px !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      backdrop-filter: blur(12px) !important;
     }
 
+    div[data-testid="stTabs"] [data-baseweb="tab"],
     [data-baseweb="tab"] {
-      border-radius: 10px !important;
+      flex: 1 1 0% !important;
+      justify-content: center !important;
+      text-align: center !important;
+      border-radius: 12px !important;
       color: var(--text-muted) !important;
       font-family: var(--font-display) !important;
-      font-weight: 600 !important;
-      padding: 8px 18px !important;
-      transition: all 0.2s ease !important;
+      font-weight: 700 !important;
+      font-size: 14px !important;
+      padding: 10px 18px !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
       border: none !important;
+      background: transparent !important;
     }
 
+    div[data-testid="stTabs"] [data-baseweb="tab"]:hover,
+    [data-baseweb="tab"]:hover {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    div[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"],
     [data-baseweb="tab"][aria-selected="true"] {
       background: rgba(255, 255, 255, 0.10) !important;
       color: #ffffff !important;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Hide default Streamlit / BaseWeb underline bar and bottom border */
+    div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
+    div[data-testid="stTabs"] [data-baseweb="tab-border"],
+    [data-baseweb="tab-highlight"],
+    [data-baseweb="tab-border"] {
+      display: none !important;
+      height: 0 !important;
+      background: transparent !important;
     }
 
     /* Metrics */
