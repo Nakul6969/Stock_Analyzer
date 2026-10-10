@@ -1,0 +1,7 @@
+.env
+.venv/
+venv/
+__pycache__/
+.idea/
+.streamlit/secrets.toml
+atlas_info.txt

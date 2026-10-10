@@ -1,0 +1,12 @@
+streamlit
+requests
+pandas
+numpy
+plotly
+yfinance
+python-dotenv
+pymongo
+dnspython
+bcrypt
+scikit-learn
+joblib

@@ -1,0 +1,794 @@
+=== riskMeter ===
+{
+  "categoryName": "Moderate risk",
+  "stdDev": 19.36
+}
+
+=== keyMetrics ===
+{
+  "mgmtEffectiveness": [
+    {
+      "displayName": "Return on average equity - 5 year average",
+      "key": "returnOnAverageEquity5YearAverage",
+      "value": "8.63"
+    },
+    {
+      "displayName": "Net Income/employee - trailing 12 month",
+      "key": "netIncomePerEmployeeTrailing12Month",
+      "value": "2415752.00"
+    },
+    {
+      "displayName": "Revenue/employee - most recent fiscal year",
+      "key": "revenuePerEmployeeMostRecentFiscalYear",
+      "value": "26113810.00"
+    },
+    {
+      "displayName": "Return on investment - most recent fiscal year",
+      "key": "returnOnInvestmentMostRecentFiscalYear",
+      "value": "6.32"
+    },
+    {
+      "displayName": "Return on average assets - most recent fiscal year",
+      "key": "returnOnAverageAssetsMostRecenFiscalYear",
+      "value": "4.36"
+    },
+    {
+      "displayName": "Receivables turnover - most recent fiscal year",
+      "key": "receivablesTurnoverMostRecentFiscalYear",
+      "value": "26.58"
+    },
+    {
+      "displayName": "Return on investment - trailing 12 month",
+      "key": "returnOnInvestmentTrailing12Month",
+      "value": null
+    },
+    {
+      "displayName": "Return on average assets - trailing 12 month",
+      "key": "returnOnAverageAssetsTrailing12Month",
+      "value": null
+    },
+    {
+      "displayName": "Inventory turnover - most recent fiscal year",
+      "key": "inventoryTurnoverMostRecentFiscalYear",
+      "value": "4.53"
+    },
+    {
+      "displayName": "Inventory turnover - trailing 12 month",
+      "key": "inventoryTurnoverTrailing12Month)",
+      "value": null
+    },
+    {
+      "displayName": "Revenue/employee - trailing 12 month",
+      "key": "revenuePerEmployeeTrailing12Month",
+      "value": "25827410.00"
+    },
+    {
+      "displayName": "Return on average assets - 5 year average",
+      "key": "returnOnAverageAssets5YearAverage",
+      "value": "4.56"
+    },
+    {
+      "displayName": "Net Income/employee - most recent fiscal year",
+      "key": "netIncomePerEmployeeMostRecentFiscalYear",
+      "value": "2152412.00"
+    },
+    {
+      "displayName": "Return on average equity - trailing 12 month",
+      "key": "returnOnAverageEquityTrailing12Month",
+      "value": null
+    },
+    {
+      "displayName": "Receivables turnover - trailing 12 month",
+      "key": "receivablesTurnoverTrailing12Month",
+      "value": null
+    },
+    {
+      "displayName": "Asset turnover - most recent fiscal year",
+      "key": "assetTurnoverMostRecentFiscalYear",
+      "value": "0.53"
+    },
+    {
+      "displayName": "Asset turnover - trailing 12 month",
+      "key": "assetTurnoverTrailing12Month",
+      "value": null
+    },
+    {
+      "displayName": "Return on average equity - most recent fiscal year",
+      "key": "returnOnAverageEquityMostRecentFiscalYear)",
+      "value": "8.51"
+    },
+    {
+      "displayName": "Return on investment - 5 year average",
+      "key": "returnOnInvestment5YearAverage",
+      "value": "6.56"
+    }
+  ],
+  "margins": [
+    {
+      "displayName": "Operating margin - trailing 12 month",
+      "key": "operatingMarginTrailing12Month",
+      "value": "11.74"
+    },
+    {
+      "displayName": "Gross Margin - 5 year average",
+      "key": "grossMargin5YearAverage",
+      "value": "29.82"
+    },
+    {
+      "displayName": "Operating margin - 1st historical fiscal year",
+      "key": "operatingMargin1stHistoricalFiscalYear)",
+      "value": "11.45"
+    },
+    {
+      "displayName": "Operating Margin - 5 year average",
+      "key": "operatingMargin5YearAverage",
+      "value": "11.60"
+    },
+    {
+      "displayName": "Net Profit Margin % - 1st historical fiscal year",
+      "key": "netProfitMarginPercent1stHistoricalFiscalYear",
+      "value": "8.24"
+    },
+    {
+      "displayName": "Gross Margin - 1st historical fiscal year",
+      "key": "grossMargin1stHistoricalFiscalYear",
+      "value": "30.88"
+    },
+    {
+      "displayName": "Net Profit Margin % - trailing 12 month",
+      "key": "netProfitMarginPercentTrailing12Month",
+      "value": "9.35"
+    },
+    {
+      "displayName": "Net Profit Margin - 5 year average",
+      "key": "netProfitMargin5YearAverage",
+      "value": "8.86"
+    },
+    {
+      "displayName": "Pretax Margin - 5 year average",
+      "key": "pretaxMargin5YearAverage",
+      "value": "11.09"
+    },
+    {
+      "displayName": "Free Operating Cash Flow/Revenue, TTM",
+      "key": "freeOperatingCashFlowPerRevenueTTM",
+      "value": null
+    },
+    {
+      "displayName": "Pretax margin - 1st historical fiscal year",
+      "key": "pretaxMargin1stHistoricalFiscalYear",
+      "value": "10.82"
+    },
+    {
+      "displayName": "Pretax margin - trailing 12 month",
+      "key": "pretaxMarginTrailing12Month",
+      "value": "12.01"
+    },
+    {
+      "displayName": "Free Operating Cash Flow/Revenue, 5 Year Average",
+      "key": "freeOperatingCashFlowPerRevenue5YearAverage",
+      "value": "-1.92"
+    },
+    {
+      "displayName": "Gross Margin - trailing 12 month",
+      "key": "grossMarginTrailing12Month",
+      "value": "35.19"
+    }
+  ],
+  "financialstrength": [
+    {
+      "displayName": "Net Interest coverage - most recent fiscal year",
+      "key": "netInterestCoverageMostRecentFiscalYear",
+      "value": "12.05"
+    },
+    {
+      "displayName": "Current EV/Free Cash Flow, LTM",
+      "key": "currentEVPerFreeCashFlowLTM",
+      "value": null
+    },
+    {
+      "displayName": "Free Cash Flow - trailing 12 month",
+      "key": "freeCashFlowtrailing12Month",
+      "value": null
+    },
+    {
+      "displayName": "Total debt/total equity - most recent quarter",
+      "key": "totalDebtPerTotalEquityMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Free Cash Flow - most recent fiscal year",
+      "key": "freeCashFlowMostRecentFiscalYear",
+      "value": "319700.00"
+    },
+    {
+      "displayName": "LT debt/equity - most recent fiscal year",
+      "key": "ltDebtPerEquityMostRecentFiscalYear)",
+      "value": "0.30"
+    },
+    {
+      "displayName": "Quick ratio - most recent fiscal year",
+      "key": "quickRatioMostRecentFiscalYear",
+      "value": "0.78"
+    },
+    {
+      "displayName": "Quick ratio - most recent quarter",
+      "key": "quickRatioMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Payout ratio - trailing 12 month",
+      "key": "payoutRatioTrailing12Month",
+      "value": "8.94"
+    },
+    {
+      "displayName": "Current ratio - most recent fiscal year",
+      "key": "currentRatioMostRecentFiscalYear",
+      "value": "1.10"
+    },
+    {
+      "displayName": "Current EV/Free Cash Flow, LFY",
+      "key": "currentEVPerFreeCashFlowLFY",
+      "value": null
+    },
+    {
+      "displayName": "LT debt/equity - most recent quarter",
+      "key": "lTDebtPerEquityMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Total debt/total equity - most recent fiscal year",
+      "key": "totalDebtPerTotalEquityMostRecentFiscalYear",
+      "value": "0.44"
+    },
+    {
+      "displayName": "Net Interest coverage - trailing 12 month",
+      "key": "netInterestCoverageTrailing12Month",
+      "value": "4.59"
+    },
+    {
+      "displayName": "Current ratio - most recent quarter",
+      "key": "currentRatioMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Payout ratio - most recent fiscal year",
+      "key": "payoutRatioMostRecentFiscalYear",
+      "value": "10.69"
+    }
+  ],
+  "valuation": [
+    {
+      "displayName": "P/E excluding extraordinary items, most recent fiscal year",
+      "key": "pPerEExcludingExtraordinaryItemsMostRecentFiscalYear",
+      "value": "26.91"
+    },
+    {
+      "displayName": "Current Dividend Yield - Common Stock Primary Issue, LTM",
+      "key": "currentDividendYieldCommonStockPrimaryIssueLTM",
+      "value": "0.40"
+    },
+    {
+      "displayName": "Price to Book - most recent fiscal year",
+      "key": "priceToBookMostRecentFiscalYear",
+      "value": "2.22"
+    },
+    {
+      "displayName": "Price to Free Cash Flow per Share - trailing 12 months",
+      "key": "priceToFreeCashFlowPerShareTrailing12Months",
+      "value": null
+    },
+    {
+      "displayName": "P/E Basic excluding extraordinary items - TTM",
+      "key": "pPerEBasicExcludingExtraordinaryItemsTTM",
+      "value": "25.54"
+    },
+    {
+      "displayName": "P/E including extraordinary items - TTM",
+      "key": "pPerEIncludingExtraordinaryItemsTTM",
+      "value": "22.52"
+    },
+    {
+      "displayName": "P/E excluding extraordinary items low, trailing 12 months",
+      "key": "pPerEExcludingExtraordinaryItemsLowTrailing12Months",
+      "value": "21.60"
+    },
+    {
+      "displayName": "Price to Tangible Book - most fiscal year",
+      "key": "priceToTangibleBookMostFiscalYear",
+      "value": "4.32"
+    },
+    {
+      "displayName": "Dividend Yield - 5 Year Average",
+      "key": "dividendYield5YearAverage",
+      "value": "0.38"
+    },
+    {
+      "displayName": "Price to sales - most recent fiscal year",
+      "key": "priceToSalesMostRecentFiscalYear",
+      "value": "1.91"
+    },
+    {
+      "displayName": "Net Debt, LFI",
+      "key": "netDebtLFI",
+      "value": null
+    },
+    {
+      "displayName": "Price to Tangible Book - most recent quarter",
+      "key": "priceToTangibleBookMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Price to Book - most recent quarter",
+      "key": "priceToBookMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Dividend Yield - indicated annual dividend divided by closing price",
+      "key": "dividendYieldIndicatedAnnualDividendDividedByClosingprice",
+      "value": "0.40"
+    },
+    {
+      "displayName": "Price to Cash Flow per share - trailing 12 month",
+      "key": "priceToCashFlowPerShareTrailing12Month",
+      "value": "12.16"
+    },
+    {
+      "displayName": "Peg Ratio",
+      "key": "pegRatio",
+      "value": "4.32"
+    },
+    {
+      "displayName": "is ForCasted",
+      "key": "isForCasted",
+      "value": "true"
+    },
+    {
+      "displayName": "Price to Free Cash Flow per Share - most recent fiscal year",
+      "key": "priceToFreeCashFlowPerShareMostRecentFiscalYear",
+      "value": "58.62"
+    },
+    {
+      "displayName": "P/E Normalized, most recent fiscal year",
+      "key": "pPerENormalizedMostRecentFiscalYear",
+      "value": "26.86"
+    },
+    {
+      "displayName": "P/E excluding extraordinary items high, trailing 12 months",
+      "key": "pPerExcludingExtraordinaryItemsHighTrailing12Months",
+      "value": "30.82"
+    },
+    {
+      "displayName": "P/E excluding extraordinary items, most recent fiscal year quarter",
+      "key": "pPerEExcludingExtraordinaryItemsMostRecentFiscalYearQuarter",
+      "value": "22.52"
+    },
+    {
+      "displayName": "Price to sales - trailing 12 month",
+      "key": "priceToSalesTrailing12Month",
+      "value": "1.80"
+    },
+    {
+      "displayName": "Net Debt, LFY",
+      "key": "netDebtLFY",
+      "value": "1307830.00"
+    }
+  ],
+  "incomeStatement": [
+    {
+      "displayName": "Earnings before taxes - most recent fiscal year",
+      "key": "earningsBeforTaxesMostRecentFiscalYear",
+      "value": "1060170.00"
+    },
+    {
+      "displayName": "Revenue - trailing 12 month",
+      "key": "revenueTrailing12Month)",
+      "value": "10416270.00"
+    },
+    {
+      "displayName": "Net Income available to common - most recent fiscal year",
+      "key": "netIncomeAvailableToCommonMostRecentFiscalYear",
+      "value": "696480.00"
+    },
+    {
+      "displayName": "EBITD - trailing 12 month",
+      "key": "eBITDTrailing12Month",
+      "value": "1789490.00"
+    },
+    {
+      "displayName": "Net Income available to common - trailing 12 months",
+      "key": "netIncomeAvailableToCommonTrailing12Months",
+      "value": "832110.00"
+    },
+    {
+      "displayName": "Earnings per Share, Normalized, Excluding Extraordinary Items, Avg. Diluted Shares Outstanding, TTM",
+      "key": "earningsPerShareNormalizedExcludingExtraordinaryItemsAvgDilutedSharesOutstandingTTM",
+      "value": "61.49"
+    },
+    {
+      "displayName": "Revenue - most recent fiscal year",
+      "key": "revenueMostRecentFiscalYear",
+      "value": "9801360.00"
+    },
+    {
+      "displayName": "Net Income Available to Common, Normalized - most recent fiscal year",
+      "key": "netIncomeAvailabletoCommonNormalizedMostRecentFiscalYear",
+      "value": "697653.50"
+    },
+    {
+      "displayName": "Earnings before taxes - trailing 12 month",
+      "key": "earningsBeforeTaxesTrailing12Month",
+      "value": "1250700.00"
+    },
+    {
+      "displayName": "Earnings before taxes Normalized - most recent fiscal year",
+      "key": "earningsBeforeTaxesNormalizedMostRecentFiscalYear",
+      "value": "1061710.00"
+    },
+    {
+      "displayName": "EBITD - most recent fiscal year",
+      "key": "eBITDMostRecentFiscalYear",
+      "value": "1657180.00"
+    }
+  ],
+  "growth": [
+    {
+      "displayName": "EPS Change %, TTM over TTM",
+      "key": "ePSChangePercentTTMOverTTM",
+      "value": "20.28"
+    },
+    {
+      "displayName": "Revenue growth rate, 5 year",
+      "key": "revenueGrowthRate5Year",
+      "value": "9.89"
+    },
+    {
+      "displayName": "EPS growth rate, 5 year",
+      "key": "ePSGrowthRate5Year",
+      "value": "10.35"
+    },
+    {
+      "displayName": "Revenue Change % - most recent quarter 1 year ago",
+      "key": "revenueChangePercentMostRecentQuarter1YearAgo",
+      "value": "10.51"
+    },
+    {
+      "displayName": "Growth rate% - dividend, 3 year",
+      "key": "growthRatePercentDividend3Year",
+      "value": "11.20"
+    },
+    {
+      "displayName": "Growth rate% - EPS, 3 year",
+      "key": "growthRatePercentEPS3year",
+      "value": "5.22"
+    },
+    {
+      "displayName": "Revenue/share (5 yr growth)",
+      "key": "revenuePerShare(5yrGrowth)",
+      "value": "8.18"
+    },
+    {
+      "displayName": "Free Operating Cash Flow, 5 Year CAGR",
+      "key": "freeOperatingCashFlow5YearCAGR",
+      "value": "18.31"
+    },
+    {
+      "displayName": "Tangible Book Value, Total Equity, 5 Year CAGR",
+      "key": "tangibleBookValueTotalEquity5YearCAGR",
+      "value": "7.21"
+    },
+    {
+      "displayName": "Earnings Before Interest, Taxes, Depreciation & Amortization, 5 Year Interim CAGR",
+      "key": "earningsBeforeInterestTaxesDepreciationAmortization5YearInterimCAGR",
+      "value": "17.54"
+    },
+    {
+      "displayName": "Capital Spending growth rate, 5 year",
+      "key": "capitalSpendingGrowthRate5Year",
+      "value": "12.84"
+    },
+    {
+      "displayName": "Revenue Change %, TTM over TTM",
+      "key": "revenueChangePercentTTMPOverTTM",
+      "value": "8.93"
+    },
+    {
+      "displayName": "Growth rate% -  Revenue, 3 year",
+      "key": "growthRatePercentRevenue3Year",
+      "value": "10.95"
+    },
+    {
+      "displayName": "Book value per share growth rate, 5 year",
+      "key": "bookValuePerShareGrowthRate5Year",
+      "value": "11.96"
+    },
+    {
+      "displayName": "EPS Change % - most recent quarter 1 year ago",
+      "key": "ePSChangePercentMostRecentQuarter1YearAgo)",
+      "value": "0.58"
+    },
+    {
+      "displayName": "Net Profit Margin growth rate, 5 year",
+      "key": "netProfitMarginGrowthRate5Year",
+      "value": "4.80"
+    },
+    {
+      "displayName": "Earnings Before Interest, Taxes, Depreciation & Amortization, 5 Year CAGR",
+      "key": "earningsBeforeInterestTaxesDepreciationAmortization5YearCAGR",
+      "value": "13.19"
+    },
+    {
+      "displayName": "Total Debt, 5 Year CAGR",
+      "key": "totalDebt5YearCAGR",
+      "value": "1.39"
+    }
+  ],
+  "persharedata": [
+    {
+      "displayName": "Dividend Per Share - 5 year average",
+      "key": "dividendperShare5YearAverage",
+      "value": "4.50"
+    },
+    {
+      "displayName": "Cash Flow per share  - trailing 12 month",
+      "key": "cashFlowPerShareTrailing12Month",
+      "value": "113.86"
+    },
+    {
+      "displayName": "Free Cash Flow per share - trailing 12 month",
+      "key": "freeCashFlowpersharetrailing12month",
+      "value": null
+    },
+    {
+      "displayName": "Cash Flow per share - most recent fiscal year",
+      "key": "cashflowPerShareMostRecentFiscalYear",
+      "value": "99.19"
+    },
+    {
+      "displayName": "Book value (tangible) per share - most recent quarter",
+      "key": "bookValueTangibleperSharemostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Cash per share - most recent quarter",
+      "key": "cashPerShareMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "EPS including extraordinary items - trailing 12 month",
+      "key": "ePSIncludingExtraOrdinaryItemsTrailing12Month",
+      "value": "61.49"
+    },
+    {
+      "displayName": "EPS including extraordinary items - most recent fiscal year",
+      "key": "ePSIncludingExtraordinaryItemsMostRecentFiscalYear",
+      "value": "51.47"
+    },
+    {
+      "displayName": "EBITD per share - trailing 12 month",
+      "key": "eBITDPerShareTrailing12Month",
+      "value": "132.23"
+    },
+    {
+      "displayName": "Revenue/share - trailing 12 month",
+      "key": "rRevenuePerShareTrailing12onth",
+      "value": "769.67"
+    },
+    {
+      "displayName": "EPS excluding extraordinary items - trailing 12 month",
+      "key": "eEPSExcludingExtraordinaryIitemsTrailing12onth",
+      "value": "61.49"
+    },
+    {
+      "displayName": "EPS Basic excluding extraordinary items - most recent fiscal year",
+      "key": "ePSBasicExcludingExtraordinaryItemsMostRecentFiscalYear",
+      "value": "51.47"
+    },
+    {
+      "displayName": "EPS Basic excluding extraordinary items - trailing 12 month",
+      "key": "ePSBasicExcludingExtraordinaryItemsItrailing12Month",
+      "value": "61.49"
+    },
+    {
+      "displayName": "Book value per share - most recent fiscal year",
+      "key": "bookValuePerShare MostRecentFiscalYear",
+      "value": "623.10"
+    },
+    {
+      "displayName": "Book value per share - most recent quarter",
+      "key": "bookValuePerShareMostRecentQuarter",
+      "value": null
+    },
+    {
+      "displayName": "Dividend per share - most recent fiscal year",
+      "key": "dividendPerShare MostRecentFiscalYear",
+      "value": "5.50"
+    },
+    {
+      "displayName": "Revenue/share - most recent fiscal year",
+      "key": "revenuePerShareMostRecentFiscalYear",
+      "value": "724.29"
+    },
+    {
+      "displayName": "EPS Normalized - most recent fiscal year",
+      "key": "ePSNormalizedMostRecentFiscalYear",
+      "value": "51.55"
+    },
+    {
+      "displayName": "Book value (tangible) per share - most recent fiscal year",
+      "key": "bookValuePerShareMostRecentFiscalYear",
+      "value": "320.91"
+    },
+    {
+      "displayName": "Dividends per share - trailing 12 month",
+      "key": "dividendsPerShareTrailing12Month",
+      "value": "5.50"
+    },
+    {
+      "displayName": "EPS excluding extraordinary items - most recent fiscal year",
+      "key": "eEPSExcludingExtraordinaryItemsMmostRecentFiscal yea",
+      "value": "51.47"
+    },
+    {
+      "displayName": "Cash per share - most recent fiscal year",
+      "key": "cashPerShareMostRecentFiscalYear",
+      "value": "176.46"
+    }
+  ],
+  "priceandVolume": [
+    {
+      "displayName": "Market Cap",
+      "key": "marketCap",
+      "value": "1914235.92"
+    },
+    {
+      "displayName": "52 week Low Date",
+      "key": "52WeekLowDate",
+      "value": "2025-04-07T00:00:00"
+    },
+    {
+      "displayName": "Price - 1 Day % Change",
+      "key": "price1DayPercentChange",
+      "value": "-1.65"
+    },
+    {
+      "displayName": "Relative (S&P500) price percent change - 13 week",
+      "key": "relativePricePercentChange13Week",
+      "value": "2.08"
+    },
+    {
+      "displayName": "Avg trading volume last 10 days",
+      "key": "avgTradingVolumeLast10Days",
+      "value": "19.02"
+    },
+    {
+      "displayName": "Price - 13 week price percent change",
+      "key": "price13WeekPricePercentChange",
+      "value": "-10.33"
+    },
+    {
+      "displayName": "Price - 52 week price percent change",
+      "key": "price52WeekPricePercentChange",
+      "value": "11.04"
+    },
+    {
+      "displayName": "Avg Trading Volume Last 3 months",
+      "key": "avgTradingVolumeLast3months",
+      "value": "280.33"
+    },
+    {
+      "displayName": "Price - 5 Day % Change",
+      "key": "price5DayPercentChange",
+      "value": "-0.53"
+    },
+    {
+      "displayName": "Price % Change Month To Date",
+      "key": "pricePercentChangeMonthToDate",
+      "value": "-0.65"
+    },
+    {
+      "displayName": "Relative (S&P500) price percent change - 04 week",
+      "key": "relativePricePercentChange-04week",
+      "value": "9.22"
+    },
+    {
+      "displayName": "52 week High Date",
+      "key": "52WeekHighDate",
+      "value": "2026-01-05T00:00:00"
+    },
+    {
+      "displayName": "Price - 26 week price percent change",
+      "key": "price26WeekPricePercentChange",
+      "value": "-2.13"
+    },
+    {
+      "displayName": "PDATE",
+      "key": "PDATE",
+      "value": "2026-03-19T00:00:00"
+    },
+    {
+      "displayName": "Price - YTD price percent change",
+      "key": "priceYTDPricePercentChange",
+      "value": "-11.82"
+    },
+    {
+      "displayName": "Relative (S&P500) price percent change - 52 week",
+      "key": "relativePricePercentChange52Week",
+      "value": "12.90"
+    },
+    {
+      "displayName": "NPRICE",
+      "key": "NPRICE",
+      "value": "1384.80"
+    },
+    {
+      "displayName": "Relative (S&P500) price percent change - 26 week",
+      "key": "relativePricePercentChange26Week",
+      "value": "9.48"
+    },
+    {
+      "displayName": "52 week Low",
+      "key": "52WeekLow",
+      "value": "1114.85"
+    },
+    {
+      "displayName": "52 week High",
+      "key": "52WeekHigh",
+      "value": "1611.80"
+    },
+    {
+      "displayName": "Beta",
+      "key": "beta",
+      "value": "1.13"
+    },
+    {
+      "displayName": "Relative (S&P500) price percent change - Year to Date",
+      "key": "relativePricePercentChangeYearToDate",
+      "value": "1.27"
+    }
+  ]
+}
+
+=== stockTechnicalData ===
+[
+  {
+    "days": 5,
+    "bsePrice": "1393.19",
+    "nsePrice": "1393.26"
+  },
+  {
+    "days": 10,
+    "bsePrice": "1398.76",
+    "nsePrice": "1398.63"
+  },
+  {
+    "days": 20,
+    "bsePrice": "1398.41",
+    "nsePrice": "1398.18"
+  },
+  {
+    "days": 50,
+    "bsePrice": "1423.61",
+    "nsePrice": "1423.57"
+  },
+  {
+    "days": 100,
+    "bsePrice": "1476.48",
+    "nsePrice": "1476.52"
+  },
+  {
+    "days": 300,
+    "bsePrice": "1447.72",
+    "nsePrice": "1447.73"
+  }
+]
+
+=== currentPrice ===
+{
+  "BSE": "1414.55",
+  "NSE": "1414.40"
+}
+
+=== yearHigh / yearLow ===
+yearHigh: 1611.20
+yearLow: 1115.55
