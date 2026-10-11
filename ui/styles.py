@@ -428,63 +428,125 @@ def load_global_css():
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important;
     }
 
-    /* Tabs (Compatible with both legacy .stTabs and latest div[data-testid="stTabs"]) */
+    /* =====================================================
+       TABS (DUAL-ENGINE: BASEWEB & STREAMLIT 1.65+ REACT ARIA)
+       ===================================================== */
     div[data-testid="stTabs"],
     .stTabs {
-      margin-top: 14px !important;
-      margin-bottom: 16px !important;
+      margin-top: 16px !important;
+      margin-bottom: 20px !important;
     }
 
+    div[data-testid="stTabs"] [role="tablist"],
     div[data-testid="stTabs"] [data-baseweb="tab-list"],
+    .stTabs [role="tablist"],
+    .stTabs [data-baseweb="tab-list"],
     [data-baseweb="tab-list"] {
       display: flex !important;
       width: 100% !important;
       gap: 8px !important;
-      background: rgba(255, 255, 255, 0.02) !important;
       padding: 6px !important;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
       border-radius: 16px !important;
-      border: 1px solid rgba(255, 255, 255, 0.08) !important;
-      backdrop-filter: blur(12px) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
     }
 
+    /* Hide React Aria full-width bottom border pseudo-element on tablist */
+    div[data-testid="stTabs"] [role="tablist"]::after,
+    div[data-testid="stTabs"] [role="tablist"]::before,
+    .stTabs [role="tablist"]::after,
+    .stTabs [role="tablist"]::before {
+      display: none !important;
+      content: none !important;
+      height: 0 !important;
+      background: transparent !important;
+    }
+
+    div[data-testid="stTabs"] [role="tab"],
+    div[data-testid="stTabs"] [data-testid="stTab"],
     div[data-testid="stTabs"] [data-baseweb="tab"],
+    .stTabs [role="tab"],
+    .stTabs [data-baseweb="tab"],
     [data-baseweb="tab"] {
       flex: 1 1 0% !important;
+      display: flex !important;
+      align-items: center !important;
       justify-content: center !important;
       text-align: center !important;
+      height: auto !important;
+      min-height: 44px !important;
+      padding: 10px 20px !important;
       border-radius: 12px !important;
       color: var(--text-muted) !important;
       font-family: var(--font-display) !important;
       font-weight: 700 !important;
       font-size: 14px !important;
-      padding: 10px 18px !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      border: none !important;
+      letter-spacing: 0.02em !important;
       background: transparent !important;
+      border: 1px solid transparent !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      cursor: pointer !important;
+      outline: none !important;
     }
 
+    div[data-testid="stTabs"] [role="tab"] p,
+    div[data-testid="stTabs"] [data-testid="stTab"] p,
+    div[data-testid="stTabs"] [data-baseweb="tab"] p {
+      margin: 0 !important;
+      font-family: var(--font-display) !important;
+      font-weight: 700 !important;
+      font-size: 14px !important;
+      letter-spacing: 0.02em !important;
+      color: inherit !important;
+    }
+
+    div[data-testid="stTabs"] [role="tab"]:hover,
+    div[data-testid="stTabs"] [data-testid="stTab"]:hover,
+    div[data-testid="stTabs"] [data-testid="stTab"][data-hovered],
     div[data-testid="stTabs"] [data-baseweb="tab"]:hover,
+    .stTabs [role="tab"]:hover,
+    .stTabs [data-baseweb="tab"]:hover,
     [data-baseweb="tab"]:hover {
       color: #ffffff !important;
       background: rgba(255, 255, 255, 0.05) !important;
+      border-color: rgba(255, 255, 255, 0.10) !important;
     }
 
+    div[data-testid="stTabs"] [role="tab"][aria-selected="true"],
+    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"],
+    div[data-testid="stTabs"] [data-testid="stTab"][data-selected],
     div[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"],
+    .stTabs [role="tab"][aria-selected="true"],
+    .stTabs [data-baseweb="tab"][aria-selected="true"],
     [data-baseweb="tab"][aria-selected="true"] {
-      background: rgba(255, 255, 255, 0.10) !important;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
       color: #ffffff !important;
-      border: 1px solid rgba(255, 255, 255, 0.22) !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+      border: 1px solid rgba(255, 255, 255, 0.28) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 0 18px rgba(255, 255, 255, 0.06) !important;
     }
 
-    /* Hide default Streamlit / BaseWeb underline bar and bottom border */
+    /* Hide all default Streamlit / BaseWeb / React Aria underline bars and bottom borders */
+    div[data-testid="stTabs"] .react-aria-SelectionIndicator,
+    div[data-testid="stTabs"] [data-testid="stTab"] > span:not([data-testid="stMarkdownContainer"]),
     div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
     div[data-testid="stTabs"] [data-baseweb="tab-border"],
+    div[data-testid="stTabs"] div[role="presentation"],
+    .stTabs .react-aria-SelectionIndicator,
+    .stTabs [data-baseweb="tab-highlight"],
+    .stTabs [data-baseweb="tab-border"],
     [data-baseweb="tab-highlight"],
     [data-baseweb="tab-border"] {
       display: none !important;
       height: 0 !important;
+      width: 0 !important;
       background: transparent !important;
+      opacity: 0 !important;
     }
 
     /* Metrics */

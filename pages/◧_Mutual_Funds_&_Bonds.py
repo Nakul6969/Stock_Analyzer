@@ -62,67 +62,6 @@ div[data-testid="stForm"] {
   letter-spacing: -0.02em;
 }
 
-/* ================= EQUAL-WIDTH LUXURY TABS ================= */
-div[data-testid="stTabs"],
-.stTabs {
-  margin-top: 14px !important;
-  margin-bottom: 16px !important;
-}
-
-div[data-testid="stTabs"] [data-baseweb="tab-list"],
-.stTabs [data-baseweb="tab-list"] {
-  display: flex !important;
-  width: 100% !important;
-  gap: 8px !important;
-  padding: 6px !important;
-  background: rgba(255, 255, 255, 0.02) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 16px !important;
-  backdrop-filter: blur(12px) !important;
-}
-
-div[data-testid="stTabs"] [data-baseweb="tab"],
-.stTabs [data-baseweb="tab"] {
-  flex: 1 1 0% !important;
-  justify-content: center !important;
-  text-align: center !important;
-  padding: 11px 20px !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.02em !important;
-  color: #71717a !important;
-  background: transparent !important;
-  border-radius: 12px !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  border: none !important;
-}
-
-div[data-testid="stTabs"] [data-baseweb="tab"]:hover,
-.stTabs [data-baseweb="tab"]:hover {
-  color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-}
-
-div[data-testid="stTabs"] [aria-selected="true"],
-.stTabs [aria-selected="true"] {
-  color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.10) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
-}
-
-div[data-testid="stTabs"] div[role="presentation"],
-div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
-div[data-testid="stTabs"] [data-baseweb="tab-border"],
-div[data-testid="stTabs"] [aria-hidden="true"],
-.stTabs div[role="presentation"],
-.stTabs [data-baseweb="tab-highlight"],
-.stTabs [data-baseweb="tab-border"],
-.stTabs [aria-hidden="true"] {
-  display: none !important;
-  height: 0 !important;
-}
-
 /* ================= SIP LUXURY METRIC CARDS ================= */
 .sip-card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
