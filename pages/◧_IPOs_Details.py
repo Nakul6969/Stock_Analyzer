@@ -169,35 +169,60 @@ st.markdown("""
   margin-top:6px;
 }
 
-/* Metric cards inside IPO Dashboard - prevent ellipsis truncation */
-[data-testid="stMetric"] {
-    padding: 10px 12px !important;
+/* Metric cards inside IPO Dashboard - uniform equal height and width */
+[data-testid="column"] {
+    display: flex !important;
+    flex-direction: column !important;
 }
+
+[data-testid="column"] > div {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+[data-testid="stMetric"] {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    height: 96px !important;
+    min-height: 96px !important;
+    max-height: 96px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+}
+
 [data-testid="stMetricLabel"] {
     font-size: 11px !important;
     color: var(--muted) !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
     white-space: nowrap !important;
+    margin-bottom: 2px !important;
 }
+
 [data-testid="stMetricValue"] {
     font-size: 15px !important;
     font-weight: 700 !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-    text-overflow: unset !important;
-    overflow: visible !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     line-height: 1.25 !important;
 }
+
 [data-testid="stMetricValue"] > div {
-    white-space: normal !important;
-    word-break: break-word !important;
-    text-overflow: unset !important;
-    overflow: visible !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
+
 [data-testid="stMetricDelta"] {
-    font-size: 12px !important;
+    font-size: 11px !important;
     font-weight: 600 !important;
+    margin-top: 1px !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -356,7 +381,7 @@ def render_upcoming(ipo):
     gmp_val = str(ipo.get("gmp_value") or "₹ 18")
     gmp_del = str(ipo.get("gmp_delta") or "+12.5%")
 
-    c1, c2, c3, c4 = st.columns([1.35, 1.15, 1.0, 1.0])
+    c1, c2, c3, c4 = st.columns(4)
     c1.metric("Price Band", f"{price(ipo.get('min_price'))} – {price(ipo.get('max_price'))}")
     c2.metric("Est. GMP", gmp_val, delta=gmp_del)
     c3.metric("Symbol", safe(ipo.get("symbol")))
@@ -402,7 +427,7 @@ def render_active(ipo):
 
     sub_str = str(ipo.get("subscription") or "Live")
 
-    c1, c2, c3, c4, c5 = st.columns([1.3, 1.15, 0.95, 0.95, 0.95])
+    c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Price Band", price_band)
     c2.metric("Est. GMP", gmp_val, delta=gmp_del)
     c3.metric("Lot Size", lot_str)
@@ -417,7 +442,7 @@ def render_active(ipo):
 def render_listed(ipo):
     type_str = "SME - IPO" if ipo.get("is_sme") else "Mainboard - IPO"
 
-    c1, c2, c3, c4 = st.columns([1.1, 1.1, 1.0, 1.15])
+    c1, c2, c3, c4 = st.columns(4)
     c1.metric("Issue Price", price(ipo.get("issue_price")))
     c2.metric("Listing Price", price(ipo.get("listing_price")))
     c3.metric("Listing Gain", format_pct(ipo.get("listing_gains")))
@@ -435,7 +460,7 @@ def render_listed(ipo):
 def render_closed(ipo):
     type_str = "SME - IPO" if ipo.get("is_sme") else "Mainboard - IPO"
 
-    c1, c2, c3 = st.columns([1.45, 1.0, 1.1])
+    c1, c2, c3 = st.columns(3)
     c1.metric("Price Band", f"{price(ipo.get('min_price'))} – {price(ipo.get('max_price'))}")
     c2.metric("Symbol", safe(ipo.get("symbol")))
     c3.metric("IPO Type", type_str)
