@@ -76,25 +76,108 @@ st.markdown("""
   font-size:11px; font-weight:700; letter-spacing:0.13em;
   text-transform:uppercase; color:var(--accent2); margin-bottom:16px;
 }
+/* ── FILTER GROUP HEADER & VALUE BADGES ── */
+.filter-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
 .filter-group-label {
-  font-size:12px; color:var(--muted); font-weight:600;
-  margin-bottom:5px; display:block;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.filter-val-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
 }
 
-/* ── NUMBER INPUT OVERRIDES ── */
-input[type=number] {
-  background: rgba(255,255,255,0.05) !important;
-  border: 1px solid rgba(255,255,255,0.15) !important;
-  border-radius: 10px !important;
-  color: #e2e8f0 !important;
+/* ── WHITE SLIDER BAR STYLING ── */
+div[data-testid="stSlider"] {
+  padding-top: 2px !important;
+  margin-bottom: 12px !important;
+}
+
+/* Slider Track BaseWeb Container */
+div[data-testid="stSlider"] [data-baseweb="slider"] {
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+}
+
+/* Inactive Track (Dark glass line) */
+div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
+  background: rgba(255, 255, 255, 0.14) !important;
+  height: 6px !important;
+  border-radius: 999px !important;
+}
+
+/* Active Range Bar (PURE WHITE GLOWING BAR) */
+div[data-testid="stSlider"] [data-baseweb="slider"] > div > div > div,
+div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="background: rgb"],
+div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="background-color: rgb"] {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  height: 6px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 2px rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Thumbs / Knobs (PURE WHITE with subtle dark rim and white glow) */
+div[data-testid="stSlider"] div[role="slider"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.9), 0 2px 5px rgba(0, 0, 0, 0.6) !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  cursor: grab !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+div[data-testid="stSlider"] div[role="slider"]:hover,
+div[data-testid="stSlider"] div[role="slider"]:focus {
+  transform: scale(1.15) !important;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 1.0) !important;
+}
+
+div[data-testid="stSlider"] div[role="slider"]:active {
+  cursor: grabbing !important;
+  transform: scale(1.22) !important;
+  box-shadow: 0 0 22px rgba(255, 255, 255, 1.0) !important;
+}
+
+/* Thumb Tooltip Value (Floating Pill) */
+div[data-testid="stSlider"] div[data-testid="stThumbValue"],
+div[data-testid="stSlider"] div[role="slider"] > div {
+  color: #000000 !important;
+  background: #ffffff !important;
   font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 800 !important;
+  font-size: 11px !important;
+  border-radius: 6px !important;
+  padding: 2px 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
-input[type=number]:focus {
-  border-color: rgba(255, 255, 255, 0.300) !important;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.060) !important;
+
+/* Min & Max Tick Values at Ends */
+div[data-testid="stSlider"] [data-testid="stTickBarMin"],
+div[data-testid="stSlider"] [data-testid="stTickBarMax"],
+div[data-testid="stSlider"] [data-testid="stSliderTickBar"] {
+  color: #71717a !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
 }
-.stNumberInput label { color: var(--muted) !important; font-size: 12px !important; }
-div[data-testid="stNumberInput"] { margin-bottom: 0 !important; }
 
 /* ── PRESET CHIPS ── */
 .preset-label {
@@ -353,65 +436,220 @@ if df.empty:
     st.error("⚠ Unable to fetch stock data."); st.stop()
 df = df[df["Price"] > 0].reset_index(drop=True)
 
+def fmt_price_badge(p0, p1):
+    p0_s = f"₹{int(p0):,}"
+    p1_s = f"₹{int(p1):,}" if p1 < 150000 else "₹1.5L+"
+    return f"{p0_s} – {p1_s}"
+
+def fmt_pe_badge(pe0, pe1):
+    pe1_s = f"{int(pe1)}×" if pe1 < 150 else "Any P/E"
+    return f"{int(pe0)}× – {pe1_s}"
+
+def fmt_mc_badge(mc0, mc1):
+    mc0_s = fmt_cr(mc0)
+    mc1_s = fmt_cr(mc1) if mc1 < 2000000 else "Mega Cap"
+    return f"{mc0_s} – {mc1_s}"
+
+def fmt_debt_badge(d_val):
+    if d_val <= 100:
+        return "✅ Debt Free (≤ ₹100 Cr)"
+    elif d_val >= 500000:
+        return "All Stocks (No Debt Limit)"
+    return f"Up to {fmt_cr(d_val)}"
+
+def fmt_roe_badge(roe_val):
+    return "Any ROE (0%+)" if roe_val == 0 else f"Min. {int(roe_val)}% ROE"
+
+def fmt_div_badge(div_val):
+    return "Any Yield (0.0%+)" if div_val == 0.0 else f"Min. {div_val:.1f}% Yield"
+
 # ─────────────────────────────────────────────
 # PRESET CHIP HANDLER
-# Clicking a preset button sets session state defaults for the inputs
+# Clicking a preset button updates slider values in session state
 # ─────────────────────────────────────────────
 if "preset" not in st.session_state:
     st.session_state.preset = None
 
+# Initialize default session state values for sliders
+if "slider_price" not in st.session_state:
+    st.session_state["slider_price"] = (0, 150000)
+if "slider_pe" not in st.session_state:
+    st.session_state["slider_pe"] = (0, 150)
+if "slider_mc" not in st.session_state:
+    st.session_state["slider_mc"] = (0, 2000000)
+if "slider_debt" not in st.session_state:
+    st.session_state["slider_debt"] = 500000
+if "slider_roe" not in st.session_state:
+    st.session_state["slider_roe"] = 0
+if "slider_div" not in st.session_state:
+    st.session_state["slider_div"] = 0.0
+
 preset_cols = st.columns(len(PRESETS))
-for i, (label, vals) in enumerate(PRESETS.items()):
+for i, label in enumerate(PRESETS.keys()):
     with preset_cols[i]:
         if st.button(label, use_container_width=True, key=f"preset_{i}"):
             st.session_state.preset = label if label != "🔁 Reset" else None
-            # write preset values into session state for the number inputs
-            for k in ["pe_min","pe_max","mc_min","mc_max","debt_min","debt_max",
-                      "price_min","price_max","roe_min","div_min"]:
-                st.session_state[k] = vals.get(k, None)
+            if label == "🔥 Low P/E":
+                st.session_state["slider_pe"] = (0, 15)
+            elif label == "💰 Large Cap":
+                st.session_state["slider_mc"] = (50000, 2000000)
+            elif label == "🏦 Mid Cap":
+                st.session_state["slider_mc"] = (5000, 50000)
+            elif label == "🌱 Small Cap":
+                st.session_state["slider_mc"] = (0, 5000)
+            elif label == "✅ Debt Free":
+                st.session_state["slider_debt"] = 100
+            elif label == "📈 High ROE":
+                st.session_state["slider_roe"] = 20
+            elif label == "💸 Dividend":
+                st.session_state["slider_div"] = 1.0
+            elif label == "🔁 Reset":
+                st.session_state["slider_price"] = (0, 150000)
+                st.session_state["slider_pe"] = (0, 150)
+                st.session_state["slider_mc"] = (0, 2000000)
+                st.session_state["slider_debt"] = 500000
+                st.session_state["slider_roe"] = 0
+                st.session_state["slider_div"] = 0.0
+            st.rerun()
 
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# FILTER PANEL — number inputs (no sliders)
+# FILTER PANEL — WHITE SLIDER BARS WITH FORMATTED VALUES
 # ─────────────────────────────────────────────
-def get_default(key, fallback):
-    v = st.session_state.get(key, None)
-    return float(v) if v is not None else fallback
-
 st.markdown('<div class="filter-panel"><div class="section-label">⚙ Filter Parameters</div>', unsafe_allow_html=True)
 
-row1 = st.columns(5)
+# Row 1: Price, P/E, Market Cap
+r1_c1, r1_c2, r1_c3 = st.columns(3)
 
-with row1[0]:
-    st.markdown('<span class="filter-group-label">💰 Price (₹)</span>', unsafe_allow_html=True)
-    ca, cb = st.columns(2)
-    with ca: price_min = st.number_input("Min", min_value=0.0, value=get_default("price_min", 0.0),    step=10.0, label_visibility="collapsed", key="n_price_min", format="%g")
-    with cb: price_max = st.number_input("Max", min_value=0.0, value=get_default("price_max", 99999.0), step=10.0, label_visibility="collapsed", key="n_price_max", format="%g")
+with r1_c1:
+    cur_p = st.session_state.get("slider_price", (0, 150000))
+    st.markdown(
+        f'<div class="filter-header-row">'
+        f'<span class="filter-group-label">💰 Price Range</span>'
+        f'<span class="filter-val-pill">{fmt_price_badge(cur_p[0], cur_p[1])}</span>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+    price_range = st.slider(
+        "Price Range",
+        min_value=0,
+        max_value=150000,
+        value=st.session_state["slider_price"],
+        step=100,
+        format="₹%d",
+        label_visibility="collapsed",
+        key="slider_price"
+    )
+    price_min, price_max = price_range
 
-with row1[1]:
-    st.markdown('<span class="filter-group-label">📈 P/E Ratio</span>', unsafe_allow_html=True)
-    ca, cb = st.columns(2)
-    with ca: pe_min = st.number_input("Min", min_value=0.0, value=get_default("pe_min", 0.0),   step=1.0, label_visibility="collapsed", key="n_pe_min", format="%g")
-    with cb: pe_max = st.number_input("Max", min_value=0.0, value=get_default("pe_max", 200.0), step=1.0, label_visibility="collapsed", key="n_pe_max", format="%g")
+with r1_c2:
+    cur_pe = st.session_state.get("slider_pe", (0, 150))
+    st.markdown(
+        f'<div class="filter-header-row">'
+        f'<span class="filter-group-label">📈 P/E Ratio</span>'
+        f'<span class="filter-val-pill">{fmt_pe_badge(cur_pe[0], cur_pe[1])}</span>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+    pe_range = st.slider(
+        "P/E Ratio",
+        min_value=0,
+        max_value=150,
+        value=st.session_state["slider_pe"],
+        step=1,
+        format="%d×",
+        label_visibility="collapsed",
+        key="slider_pe"
+    )
+    pe_min, pe_max = pe_range
 
-with row1[2]:
-    st.markdown('<span class="filter-group-label">🏦 Market Cap (₹ Cr)</span>', unsafe_allow_html=True)
-    ca, cb = st.columns(2)
-    with ca: mc_min = st.number_input("Min", min_value=0.0, value=get_default("mc_min", 0.0),      step=1000.0, label_visibility="collapsed", key="n_mc_min", format="%g")
-    with cb: mc_max = st.number_input("Max", min_value=0.0, value=get_default("mc_max", 9999999.0), step=1000.0, label_visibility="collapsed", key="n_mc_max", format="%g")
+with r1_c3:
+    cur_mc = st.session_state.get("slider_mc", (0, 2000000))
+    st.markdown(
+        f'<div class="filter-header-row">'
+        f'<span class="filter-group-label">🏦 Market Cap</span>'
+        f'<span class="filter-val-pill">{fmt_mc_badge(cur_mc[0], cur_mc[1])}</span>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+    mc_range = st.slider(
+        "Market Cap",
+        min_value=0,
+        max_value=2000000,
+        value=st.session_state["slider_mc"],
+        step=5000,
+        format="%d Cr",
+        label_visibility="collapsed",
+        key="slider_mc"
+    )
+    mc_min, mc_max = mc_range
 
-with row1[3]:
-    st.markdown('<span class="filter-group-label">🔴 Max Debt (₹ Cr)</span>', unsafe_allow_html=True)
-    ca, cb = st.columns(2)
-    with ca: debt_min = st.number_input("Min", min_value=0.0, value=get_default("debt_min", 0.0),      step=1000.0, label_visibility="collapsed", key="n_debt_min", format="%g")
-    with cb: debt_max = st.number_input("Max", min_value=0.0, value=get_default("debt_max", 9999999.0), step=1000.0, label_visibility="collapsed", key="n_debt_max", format="%g")
+st.markdown('<div style="height: 14px;"></div>', unsafe_allow_html=True)
 
-with row1[4]:
-    st.markdown('<span class="filter-group-label">📊 ROE (%) / Div Yield (%)</span>', unsafe_allow_html=True)
-    ca, cb = st.columns(2)
-    with ca: roe_min = st.number_input("ROE ≥", min_value=0.0, value=get_default("roe_min", 0.0), step=1.0, label_visibility="collapsed", key="n_roe_min", format="%g")
-    with cb: div_min = st.number_input("Div ≥", min_value=0.0, value=get_default("div_min", 0.0), step=0.1, label_visibility="collapsed", key="n_div_min", format="%g")
+# Row 2: Max Debt, Min ROE, Min Dividend Yield
+r2_c1, r2_c2, r2_c3 = st.columns(3)
+
+with r2_c1:
+    cur_debt = st.session_state.get("slider_debt", 500000)
+    st.markdown(
+        f'<div class="filter-header-row">'
+        f'<span class="filter-group-label">🔴 Max Debt Limit</span>'
+        f'<span class="filter-val-pill">{fmt_debt_badge(cur_debt)}</span>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+    debt_max = st.slider(
+        "Max Debt",
+        min_value=0,
+        max_value=500000,
+        value=st.session_state["slider_debt"],
+        step=2500,
+        format="%d Cr",
+        label_visibility="collapsed",
+        key="slider_debt"
+    )
+    debt_min = 0.0
+
+with r2_c2:
+    cur_roe = st.session_state.get("slider_roe", 0)
+    st.markdown(
+        f'<div class="filter-header-row">'
+        f'<span class="filter-group-label">📊 Min Return on Equity (ROE)</span>'
+        f'<span class="filter-val-pill">{fmt_roe_badge(cur_roe)}</span>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+    roe_min = st.slider(
+        "Min ROE",
+        min_value=0,
+        max_value=50,
+        value=st.session_state["slider_roe"],
+        step=1,
+        format="%d%%",
+        label_visibility="collapsed",
+        key="slider_roe"
+    )
+
+with r2_c3:
+    cur_div = st.session_state.get("slider_div", 0.0)
+    st.markdown(
+        f'<div class="filter-header-row">'
+        f'<span class="filter-group-label">💸 Min Dividend Yield</span>'
+        f'<span class="filter-val-pill">{fmt_div_badge(cur_div)}</span>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
+    div_min = st.slider(
+        "Min Div Yield",
+        min_value=0.0,
+        max_value=10.0,
+        value=st.session_state["slider_div"],
+        step=0.2,
+        format="%.1f%%",
+        label_visibility="collapsed",
+        key="slider_div"
+    )
 
 st.markdown('<div class="mini-divider"></div>', unsafe_allow_html=True)
 
@@ -452,10 +690,15 @@ st.markdown("</div>", unsafe_allow_html=True)  # close filter-panel
 # ─────────────────────────────────────────────
 # APPLY FILTERS
 # ─────────────────────────────────────────────
+max_p_filter = float("inf") if price_max >= 150000 else float(price_max)
+max_mc_filter = float("inf") if mc_max >= 2000000 else float(mc_max)
+max_pe_filter = float("inf") if pe_max >= 150 else float(pe_max)
+max_debt_filter = float("inf") if debt_max >= 500000 else float(debt_max)
+
 mask = (
-    (df["Price"]     >= price_min) & (df["Price"]     <= price_max) &
-    (df["MarketCap"] >= mc_min)    & (df["MarketCap"] <= mc_max)    &
-    (df["Debt"]      >= debt_min)  & (df["Debt"]      <= debt_max)  &
+    (df["Price"]     >= price_min) & (df["Price"]     <= max_p_filter) &
+    (df["MarketCap"] >= mc_min)    & (df["MarketCap"] <= max_mc_filter) &
+    (df["Debt"]      <= max_debt_filter) &
     (df["ROE"]       >= roe_min)   &
     (df["DivYield"]  >= div_min)
 )

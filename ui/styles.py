@@ -421,11 +421,65 @@ def load_global_css():
       border: none !important;
     }
 
-    /* Slider Monochrome Accent */
+    /* =====================================================
+       SLIDER MONOCHROME ACCENT (PURE WHITE TRACK & THUMB)
+       ===================================================== */
+    div[data-testid="stSlider"] [data-baseweb="slider"] > div > div {
+      background: rgba(255, 255, 255, 0.14) !important;
+      height: 6px !important;
+      border-radius: 999px !important;
+    }
+
+    div[data-testid="stSlider"] [data-baseweb="slider"] > div > div > div,
+    div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="background: rgb"],
+    div[data-testid="stSlider"] [data-baseweb="slider"] div[style*="background-color: rgb"] {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      height: 6px !important;
+      border-radius: 999px !important;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 2px rgba(255, 255, 255, 0.9) !important;
+    }
+
     div[data-testid="stSlider"] div[role="slider"] {
       background-color: #ffffff !important;
+      background: #ffffff !important;
       border: 2px solid #000000 !important;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.95), 0 2px 4px rgba(0, 0, 0, 0.6) !important;
+      width: 18px !important;
+      height: 18px !important;
+      border-radius: 50% !important;
+      transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+    }
+
+    div[data-testid="stSlider"] div[role="slider"]:hover {
+      transform: scale(1.15) !important;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 1.0) !important;
+    }
+
+    div[data-testid="stSlider"] div[role="slider"]:active {
+      transform: scale(1.22) !important;
+      box-shadow: 0 0 22px rgba(255, 255, 255, 1.0) !important;
+    }
+
+    div[data-testid="stSlider"] div[data-testid="stThumbValue"],
+    div[data-testid="stSlider"] div[role="slider"] > div {
+      color: #000000 !important;
+      background: #ffffff !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-weight: 800 !important;
+      font-size: 11px !important;
+      border-radius: 6px !important;
+      padding: 2px 6px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    div[data-testid="stSlider"] [data-testid="stTickBarMin"],
+    div[data-testid="stSlider"] [data-testid="stTickBarMax"],
+    div[data-testid="stSlider"] [data-testid="stSliderTickBar"] {
+      color: #71717a !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
     }
 
     /* =====================================================
