@@ -117,8 +117,8 @@ def send_forgot_otp_email(to_email, otp):
 
 def get_google_auth_url():
     try:
-        client_id    = st.secrets["google_oauth"]["client_id"]
-        redirect_uri = st.secrets["google_oauth"]["redirect_uri"]
+        client_id    = str(st.secrets["google_oauth"]["client_id"]).strip()
+        redirect_uri = str(st.secrets["google_oauth"]["redirect_uri"]).strip().rstrip("/")
     except Exception:
         return None
     params = {
@@ -134,9 +134,9 @@ def get_google_auth_url():
 
 def exchange_code_for_token(code):
     try:
-        client_id     = st.secrets["google_oauth"]["client_id"]
-        client_secret = st.secrets["google_oauth"]["client_secret"]
-        redirect_uri  = st.secrets["google_oauth"]["redirect_uri"]
+        client_id     = str(st.secrets["google_oauth"]["client_id"]).strip()
+        client_secret = str(st.secrets["google_oauth"]["client_secret"]).strip()
+        redirect_uri  = str(st.secrets["google_oauth"]["redirect_uri"]).strip().rstrip("/")
     except Exception:
         return None
     resp = requests.post("https://oauth2.googleapis.com/token", data={

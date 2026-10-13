@@ -225,16 +225,69 @@ def status_badge(key):
 st.markdown('<div class="page-title">Apex Presents Indian IPO Dashboard</div>', unsafe_allow_html=True)
 st.caption("Track upcoming, active, listed & closed IPOs with clean insights")
 
-# ---------------- CACHED DATA FETCHING ----------------
-@st.cache_data(ttl=300, show_spinner=False)
-def fetch_ipos():
+# ---------------- LIVE NSE ACTIVE IPO FETCHER ----------------
+def fetch_nse_live_active_ipos():
     try:
-        response = requests.get(URL, headers=HEADERS, timeout=12)
-        if response.status_code == 200:
-            return response.json()
-        return {}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "*/*",
+            "Accept-Language": "en-US,en;q=0.9",
+        }
+        s = requests.Session()
+        s.headers.update(headers)
+        s.get("https://www.nseindia.com", timeout=6)
+        r = s.get("https://www.nseindia.com/api/ipo-current-issue", timeout=6)
+        if r.status_code == 200:
+            raw_list = r.json()
+            mapped = []
+            for item in raw_list:
+                iprice = item.get("issuePrice") or "At Cutoff"
+                is_sme = (item.get("series") == "SME")
+                sub = item.get("noOfTime")
+                try:
+                    sub_str = f"{float(sub):.2f}x Subscribed" if sub else "Live"
+                except Exception:
+                    sub_str = f"{sub}x Subscribed" if sub else "Live"
+
+                mapped.append({
+                    "name": item.get("companyName"),
+                    "symbol": item.get("symbol"),
+                    "status": "active",
+                    "is_sme": is_sme,
+                    "price_band_text": str(iprice).replace("Rs.", "₹ "),
+                    "lot_size": sub_str,
+                    "bidding_start_date": item.get("issueStartDate"),
+                    "bidding_end_date": item.get("issueEndDate"),
+                })
+            return mapped
     except Exception:
-        return {}
+        pass
+    return []
+
+# ---------------- CACHED DATA FETCHING ----------------
+@st.cache_data(ttl=180, show_spinner=False)
+def fetch_ipos():
+    data = {}
+    try:
+        response = requests.get(URL, headers=HEADERS, timeout=10)
+        if response.status_code == 200:
+            data = response.json() or {}
+    except Exception:
+        data = {}
+
+    # Overwrite with live active exchange IPOs from NSE
+    nse_active = fetch_nse_live_active_ipos()
+    if nse_active:
+        data["active"] = nse_active
+    else:
+        # Only retain active IPOs that have actual valid bidding dates
+        curr_active = data.get("active", [])
+        data["active"] = [
+            x for x in curr_active 
+            if x.get("bidding_start_date") or x.get("bidding_end_date")
+        ]
+
+    return data
 
 data = fetch_ipos()
 
@@ -262,10 +315,22 @@ def render_upcoming(ipo):
 
 def render_active(ipo):
     type_str = "SME - IPO" if ipo.get("is_sme") else "Mainboard - IPO"
+    price_band = ipo.get("price_band_text")
+    if not price_band:
+        min_p = ipo.get("min_price")
+        max_p = ipo.get("max_price")
+        if min_p and max_p:
+            price_band = f"{price(min_p)} – {price(max_p)}"
+        elif min_p:
+            price_band = price(min_p)
+        elif ipo.get("issue_price"):
+            price_band = price(ipo.get("issue_price"))
+        else:
+            price_band = "—"
 
-    c1, c2, c3, c4 = st.columns([1.45, 0.75, 1.05, 1.15])
-    c1.metric("Price Band", f"{price(ipo.get('min_price'))} – {price(ipo.get('max_price'))}")
-    c2.metric("Lot Size", safe(ipo.get("lot_size")))
+    c1, c2, c3, c4 = st.columns([1.45, 0.95, 1.0, 1.15])
+    c1.metric("Price Band", price_band)
+    c2.metric("Subscription / Lot", safe(ipo.get("lot_size")))
     c3.metric("Symbol", safe(ipo.get("symbol")))
     c4.metric("IPO Type", type_str)
 

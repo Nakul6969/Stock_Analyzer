@@ -5,11 +5,15 @@ from dotenv import load_dotenv
 from ui.sidebar import render_sidebar
 from ui.styles import load_global_css
 
+import yfinance as yf
+import pandas as pd
+import json
+
 # ======================================================
 # PAGE CONFIG (MUST BE FIRST)
 
 st.set_page_config(
-    page_title="Apex Stock Screener | Market Movers",
+    page_title="Apex Stock Screener | Nifty 50 Movers",
     page_icon="icon.png",
     layout="wide"
 )
@@ -26,13 +30,64 @@ render_sidebar()
 
 load_dotenv()
 API_KEY = os.getenv("INDIAN_API_KEY")
-
 BASE_URL = "https://stock.indianapi.in"
 HEADERS = {"X-Api-Key": API_KEY}
 
-if not API_KEY:
-    st.error("API key not found.")
-    st.stop()
+# ======================================================
+# NIFTY 50 UNIVERSE (STRICT 50 CONSTITUENTS)
+# ======================================================
+NIFTY_50_STOCKS = {
+    "ADANIENT": {"name": "Adani Enterprises", "sector": "Energy"},
+    "ADANIPORTS": {"name": "Adani Ports", "sector": "Infrastructure"},
+    "APOLLOHOSP": {"name": "Apollo Hospitals", "sector": "Healthcare"},
+    "ASIANPAINT": {"name": "Asian Paints", "sector": "FMCG"},
+    "AXISBANK": {"name": "Axis Bank", "sector": "Banking"},
+    "BAJAJ-AUTO": {"name": "Bajaj Auto", "sector": "Auto"},
+    "BAJFINANCE": {"name": "Bajaj Finance", "sector": "Finance"},
+    "BAJAJFINSV": {"name": "Bajaj Finserv", "sector": "Finance"},
+    "BEL": {"name": "Bharat Electronics", "sector": "Defence"},
+    "BHARTIARTL": {"name": "Bharti Airtel", "sector": "Telecom"},
+    "BPCL": {"name": "BPCL", "sector": "Energy"},
+    "BRITANNIA": {"name": "Britannia Industries", "sector": "FMCG"},
+    "CIPLA": {"name": "Cipla", "sector": "Pharma"},
+    "COALINDIA": {"name": "Coal India", "sector": "Energy"},
+    "DRREDDY": {"name": "Dr. Reddy's Laboratories", "sector": "Pharma"},
+    "EICHERMOT": {"name": "Eicher Motors", "sector": "Auto"},
+    "GRASIM": {"name": "Grasim Industries", "sector": "Materials"},
+    "HCLTECH": {"name": "HCL Technologies", "sector": "IT"},
+    "HDFCBANK": {"name": "HDFC Bank", "sector": "Banking"},
+    "HDFCLIFE": {"name": "HDFC Life", "sector": "Insurance"},
+    "HEROMOTOCO": {"name": "Hero MotoCorp", "sector": "Auto"},
+    "HINDALCO": {"name": "Hindalco Industries", "sector": "Metals"},
+    "HINDUNILVR": {"name": "Hindustan Unilever", "sector": "FMCG"},
+    "ICICIBANK": {"name": "ICICI Bank", "sector": "Banking"},
+    "ITC": {"name": "ITC Limited", "sector": "FMCG"},
+    "INDUSINDBK": {"name": "IndusInd Bank", "sector": "Banking"},
+    "INFY": {"name": "Infosys", "sector": "IT"},
+    "JSWSTEEL": {"name": "JSW Steel", "sector": "Metals"},
+    "KOTAKBANK": {"name": "Kotak Mahindra Bank", "sector": "Banking"},
+    "LT": {"name": "Larsen & Toubro", "sector": "Infrastructure"},
+    "M&M": {"name": "Mahindra & Mahindra", "sector": "Auto"},
+    "MARUTI": {"name": "Maruti Suzuki", "sector": "Auto"},
+    "NESTLEIND": {"name": "Nestle India", "sector": "FMCG"},
+    "NTPC": {"name": "NTPC", "sector": "Energy"},
+    "ONGC": {"name": "ONGC", "sector": "Energy"},
+    "POWERGRID": {"name": "Power Grid Corporation", "sector": "Energy"},
+    "RELIANCE": {"name": "Reliance Industries", "sector": "Energy"},
+    "SBILIFE": {"name": "SBI Life", "sector": "Insurance"},
+    "SBIN": {"name": "State Bank of India", "sector": "Banking"},
+    "SUNPHARMA": {"name": "Sun Pharma", "sector": "Pharma"},
+    "TCS": {"name": "Tata Consultancy Services", "sector": "IT"},
+    "TATACONSUM": {"name": "Tata Consumer Products", "sector": "FMCG"},
+    "TMPV": {"name": "Tata Motors", "sector": "Auto"},
+    "TATASTEEL": {"name": "Tata Steel", "sector": "Metals"},
+    "TECHM": {"name": "Tech Mahindra", "sector": "IT"},
+    "TITAN": {"name": "Titan Company", "sector": "Consumer"},
+    "ULTRACEMCO": {"name": "UltraTech Cement", "sector": "Materials"},
+    "WIPRO": {"name": "Wipro", "sector": "IT"},
+    "TRENT": {"name": "Trent Limited", "sector": "Retail"},
+    "SHRIRAMFIN": {"name": "Shriram Finance", "sector": "Finance"}
+}
 
 # ======================================================
 # PAGE CSS
@@ -185,29 +240,98 @@ div[data-testid="stFormSubmitButton"] button:hover {
 # ======================================================
 # HEADER
 # ======================================================
-st.markdown('<div class="page-title">Market Movers By Apex</div>', unsafe_allow_html=True)
+st.markdown('<div class="page-title">Nifty 50 Market Movers</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="page-subtitle">'
-    'Separated top gaining and losing stocks with strong intraday movement.'
+    'Live intraday top gaining and losing stocks strictly from the NIFTY 50 index.'
     '</div>',
     unsafe_allow_html=True
 )
 st.divider()
 # ======================================================
-# DATA FETCH
+# DATA FETCH (STRICT NIFTY 50 STOCKS)
 # ======================================================
-@st.cache_data(ttl=60, show_spinner=False)
-def fetch_movers():
-    r = requests.get(f"{BASE_URL}/trending", headers=HEADERS, timeout=10)
-    return r.json() if r.status_code == 200 else None
+@st.cache_data(ttl=180, show_spinner=False)
+def fetch_nifty50_movers():
+    # 1. Real-time batch fetch via yfinance
+    try:
+        yf_symbols = [f"{sym}.NS" for sym in NIFTY_50_STOCKS.keys()]
+        df = yf.download(yf_symbols, period="5d", interval="1d", progress=False)
+        close = df["Close"].dropna(how="all")
+        if len(close) >= 2:
+            prev = close.iloc[-2]
+            curr = close.iloc[-1]
+            high_s = df["High"].iloc[-1]
+            low_s = df["Low"].iloc[-1]
+            vol_s = df["Volume"].iloc[-1]
 
-data = fetch_movers()
-if not data:
-    st.error("Failed to fetch data.")
-    st.stop()
+            movers = []
+            for sym, info in NIFTY_50_STOCKS.items():
+                col = f"{sym}.NS"
+                try:
+                    c = float(curr[col])
+                    p = float(prev[col])
+                    if p > 0 and c > 0:
+                        chg_pct = round(((c - p) / p) * 100, 2)
+                        h = round(float(high_s[col]), 2)
+                        l = round(float(low_s[col]), 2)
+                        v = int(vol_s[col]) if not pd.isna(vol_s[col]) else 0
+                        movers.append({
+                            "company_name": info["name"],
+                            "ticker_id": sym if sym != "TMPV" else "TATAMOTORS",
+                            "exchange_type": "NSE",
+                            "price": f"{c:,.2f}",
+                            "raw_price": c,
+                            "percent_change": chg_pct,
+                            "volume": f"{v:,}" if v > 0 else "—",
+                            "high": f"{h:,.2f}",
+                            "low": f"{l:,.2f}",
+                            "long_term_trends": "Bullish" if chg_pct > 0 else "Bearish",
+                            "overall_rating": "Bullish" if chg_pct >= 1.5 else ("Bearish" if chg_pct <= -1.5 else "Neutral")
+                        })
+                except Exception:
+                    continue
 
-gainers = data.get("trending_stocks", {}).get("top_gainers", [])
-losers = data.get("trending_stocks", {}).get("top_losers", [])
+            if movers:
+                g = sorted([m for m in movers if m["percent_change"] >= 0], key=lambda x: x["percent_change"], reverse=True)
+                l = sorted([m for m in movers if m["percent_change"] < 0], key=lambda x: x["percent_change"])
+                return {"gainers": g, "losers": l}
+    except Exception:
+        pass
+
+    # 2. Resilient fallback to stock_filter_cache.json
+    try:
+        cache_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "stock_filter_cache.json")
+        if os.path.exists(cache_path):
+            with open(cache_path, "r", encoding="utf-8") as f:
+                cdata = json.load(f).get("data", [])
+            nifty_keys = set(NIFTY_50_STOCKS.keys()) | {"TATAMOTORS"}
+            filtered = [x for x in cdata if x.get("Ticker") in nifty_keys]
+            movers = []
+            for x in filtered:
+                chg = float(x.get("Change%", 0))
+                movers.append({
+                    "company_name": x.get("Name"),
+                    "ticker_id": x.get("Ticker"),
+                    "exchange_type": "NSE",
+                    "price": f"{x.get('Price', 0):,.2f}",
+                    "percent_change": chg,
+                    "volume": "—",
+                    "high": f"{x.get('52W_High', 0):,.2f}",
+                    "low": f"{x.get('52W_Low', 0):,.2f}",
+                    "long_term_trends": "Bullish" if chg >= 0 else "Bearish",
+                    "overall_rating": "Bullish" if chg >= 1.0 else ("Bearish" if chg <= -1.0 else "Neutral")
+                })
+            g = sorted([m for m in movers if m["percent_change"] >= 0], key=lambda x: x["percent_change"], reverse=True)
+            l = sorted([m for m in movers if m["percent_change"] < 0], key=lambda x: x["percent_change"])
+            return {"gainers": g, "losers": l}
+    except Exception:
+        pass
+    return {"gainers": [], "losers": []}
+
+data = fetch_nifty50_movers()
+gainers = data.get("gainers", [])
+losers = data.get("losers", [])
 
 # ======================================================
 # LOGO DEV
@@ -240,11 +364,6 @@ with st.container():
         apply = st.form_submit_button("⌯✈ Apply Filters")
 
     st.markdown('</div>', unsafe_allow_html=True)
-
-
-if not apply:
-    st.info("ᯓ★ Apply filters to view stocks.")
-    st.stop()
 
 st.divider()
 
