@@ -641,13 +641,7 @@ else:
                 st.error("❌ Passwords do not match.")
             else:
                 try:
-                    try:
-                        uri = st.secrets["MONGO_URI"]
-                    except Exception:
-                        uri = os.getenv("MONGO_URI")
-                    client = MongoClient(uri)
-                    col    = client["apex_auth"]["users"]
-                    col.update_one(
+                    users_col.update_one(
                         {"email": session_email},
                         {"$set": {"password": hash_password(new_pass)}}
                     )
