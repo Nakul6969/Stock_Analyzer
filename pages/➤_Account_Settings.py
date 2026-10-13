@@ -417,7 +417,7 @@ st.markdown("""
         <div class="s-card-icon">👤</div>
         <div>
             <p class="s-card-title">Your Profile</p>
-            <p class="s-card-desc">READ-ONLY · CANNOT BE MODIFIED</p>
+            <p class="s-card-desc">ACCOUNT DETAILS & DISPLAY NAME</p>
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -426,9 +426,8 @@ st.markdown(f"""
 <div class="s-card-body">
     <div class="info-grid">
         <div class="info-field">
-            <div class="info-field-label">User ID</div>
+            <div class="info-field-label">Current Name</div>
             <div class="info-field-value">{user_name}</div>
-            <span class="info-field-badge">locked</span>
         </div>
         <div class="info-field">
             <div class="info-field-label">Email Address</div>
@@ -439,6 +438,43 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
+# Instant Name Change (No OTP Required)
+st.markdown('<div style="padding: 0 1.6rem 1.4rem 1.6rem;">', unsafe_allow_html=True)
+c_name_input, c_name_btn = st.columns([3, 1], vertical_alignment="bottom")
+with c_name_input:
+    new_name_val = st.text_input(
+        "Change Name (No OTP required)",
+        value="",
+        placeholder=f"Enter new name (current: {user_name})",
+        key="new_display_name_input"
+    )
+with c_name_btn:
+    update_name_clicked = st.button("Update Name", use_container_width=True, key="update_name_submit_btn")
+
+if update_name_clicked:
+    cleaned_name = new_name_val.strip()
+    if not cleaned_name:
+        st.warning("⚠️ Name cannot be empty.")
+    elif cleaned_name == user_name:
+        st.info("ℹ️ Name is unchanged.")
+    elif len(cleaned_name) < 2:
+        st.warning("⚠️ Name must be at least 2 characters long.")
+    else:
+        try:
+            users_col.update_one(
+                {"email": session_email},
+                {"$set": {"userid": cleaned_name}}
+            )
+            if "user" in st.session_state and isinstance(st.session_state.user, dict):
+                st.session_state.user["userid"] = cleaned_name
+            fetch_user.clear()
+            st.success("✅ Name updated successfully!")
+            time.sleep(0.5)
+            st.rerun()
+        except Exception as e:
+            st.error(f"❌ Failed to update name: {e}")
+
+st.markdown('</div>', unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
 
 # ════════════════════════════════════════
