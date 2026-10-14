@@ -227,13 +227,13 @@ def handle_github_callback():
         return False
 
 
-def _render_social_buttons():
+def _render_social_buttons(key_suffix="default"):
     auth_url = get_github_auth_url()
     if not auth_url:
         auth_url = "?error=github_not_configured"
 
     st.markdown(f"""
-    <a href="{auth_url}" target="_top" style="text-decoration:none; display:block; width:100%; margin-bottom:12px;">
+    <a href="{auth_url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:block; width:100%; margin-bottom:12px;">
         <div class="github-btn">
             <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor" style="display:inline-block; vertical-align:middle; margin-right:8px;">
                 <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
@@ -241,12 +241,16 @@ def _render_social_buttons():
             <span style="vertical-align:middle;">Continue with GitHub</span>
         </div>
     </a>
-    <a href="?action=guest_login" target="_top" style="text-decoration:none; display:block; width:100%;">
-        <div class="guest-btn">
-            <span>⚡ Explore as Guest (Demo Mode)</span>
-        </div>
-    </a>
     """, unsafe_allow_html=True)
+
+    if st.button("⚡ Explore as Guest (Demo Mode)", key=f"btn_guest_{key_suffix}", use_container_width=True):
+        st.session_state.logged_in = True
+        st.session_state.user = {
+            "email": "demo.analyst@apex.io",
+            "userid": "Guest Analyst",
+            "auth_provider": "guest"
+        }
+        st.rerun()
 
 # PAGE CONFIG (only when running this file directly)
 if __name__ == "__main__":
@@ -335,7 +339,7 @@ def login_view():
         unsafe_allow_html=True
     )
 
-    _render_social_buttons()
+    _render_social_buttons(key_suffix="login")
 
 # =========================================================
 # SIGNUP VIEW
@@ -414,7 +418,7 @@ def signup_view():
         unsafe_allow_html=True
     )
 
-    _render_social_buttons()
+    _render_social_buttons(key_suffix="signup")
 
 
 def forgot_password_view():
@@ -786,18 +790,22 @@ div[data-testid="stButton"] > button:focus {
 
     /* ---------- BUTTONS ---------- */
     div[data-testid="stButton"] button {
-        height: 48px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.05) !important;
-        color: #ffffff !important;
+        height: 48px !important;
+        border-radius: 12px !important;
+        background: rgba(56, 189, 248, 0.05) !important;
+        color: #e2e8f0 !important;
         font-family: 'Space Grotesk', -apple-system, sans-serif !important;
-        font-weight: 700;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        transition: all 0.25s ease !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        letter-spacing: 0.02em !important;
+        border: 1px dashed rgba(56, 189, 248, 0.35) !important;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     div[data-testid="stButton"] button:hover {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: rgba(255, 255, 255, 0.35) !important;
+        background: rgba(56, 189, 248, 0.15) !important;
+        border-color: #38bdf8 !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 20px rgba(56, 189, 248, 0.3) !important;
         transform: translateY(-2px);
     }
 
