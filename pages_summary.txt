@@ -1,0 +1,92 @@
+=== ENTRYPOINT: 合_Welcome.py ===
+Length: 16349 chars
+First 40 lines:
+import streamlit as st
+
+# ---------------- PAGE CONFIG (MUST BE FIRST) ----------------
+st.set_page_config(
+    page_title="Apex Stock Screener | Intelligence Platform",
+    page_icon="icon.png",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+from ui.sidebar import render_sidebar
+from ui.styles import load_global_css
+from auth.auth import render_auth
+import base64
+import yfinance as yf
+
+@st.cache_data(show_spinner=False)
+def img_to_base64(path: str) -> str:
+    try:
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    except Exception:
+        return ""
+
+logo_base64 = img_to_base64("assets/logo.png")
+
+# ---------------- SESSION INIT ----------------
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+# ---------------- AUTH GATE ----------------
+if not st.session_state.logged_in:
+    st.sidebar.empty()
+    st.markdown("""
+    <style>
+    /* Hide raw Streamlit status badge (Running ...) */
+    div[data-testid="stStatusWidget"],
+    .stStatusWidget {
+        visibility: hidden !important;
+        display: none !important;
+
+=== PAGE: ⌘_Stock_Insights.py ===
+Total lines: 970
+Defs: ['def get_logo(company_name):', 'def to_cr(value, divisor=1):', 'def get_val(section, *keywords):', 'def parse_ds(values, col):', 'def delta_color(val):', 'def sec(icon, title, sub=""):', 'def fetch_stock(name):', 'def fetch_hist(name):', 'def fetch_yfinance_ohlc(stock_name, period="1y"):']
+Titles: []
+Sample APIs: ['API_KEY  = os.getenv("INDIAN_API_KEY")', 'BASE_URL = "https://stock.indianapi.in"', 'HEADERS  = {"X-Api-Key": API_KEY}', "@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');", '<div class="si-header-tag">Live Market Data · IndianAPI.in</div>', 'return f"https://img.logo.dev/name/{name}?token={LOGO_KEY}"', 'r = requests.get(f"{BASE_URL}/stock", headers=HEADERS, params={"name": name}, timeout=15)', 'r = requests.get(f"{BASE_URL}/historical_data", headers=HEADERS,']
+
+=== PAGE: ▲▼_Nifty50_Movers.py ===
+Total lines: 439
+Defs: ['def fetch_nifty50_movers():', 'def get_company_logo(company):', 'def pct(val):', 'def stock_card(stock, pct_val, gainer=True):']
+Titles: ['st.subheader("📈 Top Gainers")', 'st.subheader("📉 Top Losers")']
+Sample APIs: ['# ENV & API', 'API_KEY = os.getenv("INDIAN_API_KEY")', 'BASE_URL = "https://stock.indianapi.in"', 'HEADERS = {"X-Api-Key": API_KEY}', 'return f"https://img.logo.dev/name/{name}?token={LOGO_DEV_PUBLIC_KEY}"']
+
+=== PAGE: ◧_Commodities.py ===
+Total lines: 197
+Defs: ['def safe(v, d="—"):', 'def price(v):', 'def pct(v):', 'def get_category(product):', 'def fetch_commodities():']
+Titles: ['st.subheader(product)']
+Sample APIs: ['# ENV & API', 'API_KEY = os.getenv("INDIAN_API_KEY")', 'URL = "https://stock.indianapi.in/commodities"', 'HEADERS = {"X-Api-Key": API_KEY}', 'if not API_KEY:', 'st.error("API key not found")', 'r = requests.get(URL, headers=HEADERS, timeout=10)']
+
+=== PAGE: ◧_IPOs_Details.py ===
+Total lines: 964
+Defs: ['def get_ipo_logo(name: str):', 'def format_pct(val):', 'def safe(val, default="—"):', 'def price(val):', 'def status_badge(key):', 'def fetch_nse_live_active_ipos():', 'def fetch_ipos():', 'def render_active(ipo):', 'def render_listed(ipo):', 'def render_upcoming(ipo):']
+Titles: []
+Sample APIs: ['API_KEY = os.getenv("INDIAN_API_KEY")', 'URL = "https://stock.indianapi.in/ipo"', 'HEADERS = {"X-Api-Key": API_KEY} if API_KEY else {}', 'safe_name = requests.utils.quote(clean)', 'return f"https://img.logo.dev/name/{safe_name}?token={LOGO_DEV_PUBLIC_KEY}"', '"additional_text": "Premier pharma formulation maker backed by Bain Capital delivered strong 31.5% listing debut."', '"note": "Ethnic lifestyle and artisanal apparel retailer re-evaluating capital market timings."', 's = requests.Session()']
+
+=== PAGE: ◧_Mutual_Funds_&_Bonds.py ===
+Total lines: 556
+Defs: ['def rupee(v):', 'def percent(v):', 'def crore(v):', 'def render_mf_table(funds):', 'def fetch_mutual_funds():', 'def fmt_inr(v):']
+Titles: []
+Sample APIs: ['# ENV & API', 'API_KEY = os.getenv("INDIAN_API_KEY")', 'URL = "https://stock.indianapi.in/mutual_funds"', 'HEADERS = {"X-Api-Key": API_KEY}', 'if not API_KEY:', 'st.error("API key not found")', 'r = requests.get(URL, headers=HEADERS, timeout=10)', 'Simulate wealth accumulation and long-term capital compounding']
+
+=== PAGE: ◧_Stock_filter.py ===
+Total lines: 817
+Defs: ['def get_ns_ticker(sym: str) -> str:', 'def _fetch_single_stock(sym: str, sector: str, close_series: pd.Series, prev_series: pd.Series) -> dict:', 'def load_data(force_live: bool = False) -> pd.DataFrame:', 'def fmt_cr(val):', 'def fmt_price_badge(p0, p1):', 'def fmt_pe_badge(pe0, pe1):', 'def fmt_mc_badge(mc0, mc1):', 'def fmt_debt_badge(d_val):', 'def fmt_roe_badge(roe_val):', 'def fmt_div_badge(div_val):']
+Titles: []
+Sample APIs: ["@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');", '"WIPRO":"IT",              "ABB":"Capital Goods",         "ADANIGREEN":"Energy",', '"GAIL":"Energy",           "GODREJCP":"FMCG",             "HAVELLS":"Capital Goods",', '"SIEMENS":"Capital Goods", "SRF":"Chemicals",             "TORNTPHARM":"Pharma",', '"VEDL":"Metals",           "VOLTAS":"Capital Goods",      "ZOMATO":"Consumer",']
+
+=== PAGE: ✦_Ai_Analyzer.py ===
+Total lines: 686
+Defs: ['def analyze_stock_cached(symbol: str) -> dict:', 'def render_gauge(score: float) -> str:', 'def render_result_card(result: dict) -> str:', 'def mini_cell(lbl, val, sub, sc):']
+Titles: []
+Sample APIs: ["@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');", 'f\'<div>MODEL: <span style="color:#ffffff">RandomForest v2.0 (17 Features)</span> • RISK: <span style="color:#ffffff">{result.get("api_risk_label","Standard")}</span></div>\'']
+
+=== PAGE: ➤_Account_Settings.py ===
+Total lines: 723
+Defs: ['def get_logo_b64():', 'def fetch_user(email):', 'def send_otp_email(to_email, otp):']
+Titles: []
+Sample APIs: ["@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');"]
+
