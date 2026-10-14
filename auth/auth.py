@@ -113,71 +113,86 @@ def send_forgot_otp_email(to_email, otp):
         st.error(f"❌ Failed to send OTP: {e}")
         return False
 
-# Google Heplper Function-------------------------------------------
+# -------------------------------------------------------------
+# GitHub OAuth & Guest Access Helpers
+# -------------------------------------------------------------
 
-def get_google_auth_url():
+def get_github_auth_url():
     try:
-        client_id    = str(st.secrets["google_oauth"]["client_id"]).strip()
-        redirect_uri = str(st.secrets["google_oauth"]["redirect_uri"]).strip().rstrip("/")
+        client_id    = str(st.secrets["github_oauth"]["client_id"]).strip()
+        redirect_uri = str(st.secrets["github_oauth"]["redirect_uri"]).strip().rstrip("/")
     except Exception:
         return None
     params = {
-        "client_id":     client_id,
-        "redirect_uri":  redirect_uri,
-        "response_type": "code",
-        "scope":         "openid email profile",
-        "access_type":   "offline",
-        "prompt":        "select_account",
+        "client_id":    client_id,
+        "redirect_uri": redirect_uri,
+        "scope":        "read:user user:email",
     }
-    return "https://accounts.google.com/o/oauth2/v2/auth?" + urlencode(params)
+    return "https://github.com/login/oauth/authorize?" + urlencode(params)
 
 
-def exchange_code_for_token(code):
+def exchange_github_code_for_token(code):
     try:
-        client_id     = str(st.secrets["google_oauth"]["client_id"]).strip()
-        client_secret = str(st.secrets["google_oauth"]["client_secret"]).strip()
-        redirect_uri  = str(st.secrets["google_oauth"]["redirect_uri"]).strip().rstrip("/")
+        client_id     = str(st.secrets["github_oauth"]["client_id"]).strip()
+        client_secret = str(st.secrets["github_oauth"]["client_secret"]).strip()
+        redirect_uri  = str(st.secrets["github_oauth"]["redirect_uri"]).strip().rstrip("/")
     except Exception:
         return None
-    resp = requests.post("https://oauth2.googleapis.com/token", data={
-        "code":          code,
-        "client_id":     client_id,
-        "client_secret": client_secret,
-        "redirect_uri":  redirect_uri,
-        "grant_type":    "authorization_code",
-    })
-    return resp.json() if resp.status_code == 200 else None
-
-
-def get_google_user_info(access_token):
-    resp = requests.get(
-        "https://www.googleapis.com/oauth2/v2/userinfo",
-        headers={"Authorization": f"Bearer {access_token}"}
+    resp = requests.post(
+        "https://github.com/login/oauth/access_token",
+        headers={"Accept": "application/json"},
+        data={
+            "code":          code,
+            "client_id":     client_id,
+            "client_secret": client_secret,
+            "redirect_uri":  redirect_uri,
+        }
     )
     return resp.json() if resp.status_code == 200 else None
 
 
-def handle_google_callback():
+def get_github_user_info(access_token):
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Accept": "application/json"
+    }
+    resp = requests.get("https://api.github.com/user", headers=headers)
+    if resp.status_code != 200:
+        return None
+    user_info = resp.json()
+    email = user_info.get("email")
+    if not email:
+        emails_resp = requests.get("https://api.github.com/user/emails", headers=headers)
+        if emails_resp.status_code == 200:
+            for item in emails_resp.json():
+                if item.get("primary") and item.get("verified"):
+                    email = item.get("email")
+                    break
+    user_info["email"] = email or f"{user_info.get('login', 'github_user')}@users.noreply.github.com"
+    return user_info
+
+
+def handle_github_callback():
     code = st.query_params.get("code")
     if not code:
         return False
 
     try:
-        token_data = exchange_code_for_token(code)
+        token_data = exchange_github_code_for_token(code)
         if not token_data or "access_token" not in token_data:
-            st.error("❌ Google login failed. Please try again.")
+            st.error("❌ GitHub login failed. Please try again.")
             st.query_params.clear()
             return False
 
-        user_info = get_google_user_info(token_data["access_token"])
+        user_info = get_github_user_info(token_data["access_token"])
         if not user_info:
-            st.error("❌ Could not fetch Google account info.")
+            st.error("❌ Could not fetch GitHub account info.")
             st.query_params.clear()
             return False
 
         email     = user_info.get("email", "").strip().lower()
-        name      = user_info.get("name", email.split("@")[0])
-        google_id = user_info.get("id", "")
+        name      = user_info.get("name") or user_info.get("login") or email.split("@")[0]
+        github_id = str(user_info.get("id", ""))
 
         try:
             existing = users_col.find_one({"email": {"$regex": f"^{re.escape(email)}$", "$options": "i"}})
@@ -187,8 +202,8 @@ def handle_google_callback():
                     "email":         email,
                     "userid":        name,
                     "password":      None,
-                    "auth_provider": "google",
-                    "google_id":     google_id,
+                    "auth_provider": "github",
+                    "github_id":     github_id,
                     "created_at":    datetime.utcnow()
                 })
                 existing = users_col.find_one({"email": email})
@@ -197,30 +212,38 @@ def handle_google_callback():
             st.session_state.user = {
                 "email":         existing["email"],
                 "userid":        existing["userid"],
-                "auth_provider": existing.get("auth_provider", "google")
+                "auth_provider": existing.get("auth_provider", "github")
             }
             st.query_params.clear()
             st.rerun()
             return True
         except Exception as e:
-            st.error(f"❌ Database error: Could not reach MongoDB Atlas. Please ensure IP access is allowed in MongoDB Atlas Network Access (allow 0.0.0.0/0).")
+            st.error("❌ Database error: Could not reach MongoDB Atlas. Please ensure IP access is allowed (0.0.0.0/0).")
             st.query_params.clear()
             return False
     except Exception as e:
-        st.error(f"❌ Google OAuth error: {e}")
+        st.error(f"❌ GitHub OAuth error: {e}")
         st.query_params.clear()
         return False
 
 
-def _render_google_button():
-    auth_url = get_google_auth_url()
+def _render_social_buttons():
+    auth_url = get_github_auth_url()
     if not auth_url:
-        auth_url = "?error=google_not_configured"
+        auth_url = "?error=github_not_configured"
+
     st.markdown(f"""
-    <a href="{auth_url}" target="_self" style="text-decoration:none; display:block; width:100%;">
-        <div class="google-btn">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18">
-            <span>Continue with Google</span>
+    <a href="{auth_url}" target="_self" style="text-decoration:none; display:block; width:100%; margin-bottom:12px;">
+        <div class="github-btn">
+            <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor" style="display:inline-block; vertical-align:middle; margin-right:8px;">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            <span style="vertical-align:middle;">Continue with GitHub</span>
+        </div>
+    </a>
+    <a href="?action=guest_login" target="_self" style="text-decoration:none; display:block; width:100%;">
+        <div class="guest-btn">
+            <span>⚡ Explore as Guest (Demo Mode)</span>
         </div>
     </a>
     """, unsafe_allow_html=True)
@@ -284,7 +307,8 @@ def login_view():
             return
 
         if not user.get("password"):
-            st.error("This account uses Google login ❌")
+            provider = (user.get("auth_provider") or "OAuth").title()
+            st.error(f"This account uses {provider} login and does not have a separate password ❌")
             return
 
         if verify_password(password, user["password"]):
@@ -311,7 +335,7 @@ def login_view():
         unsafe_allow_html=True
     )
 
-    _render_google_button()
+    _render_social_buttons()
 
 # =========================================================
 # SIGNUP VIEW
@@ -390,7 +414,7 @@ def signup_view():
         unsafe_allow_html=True
     )
 
-    _render_google_button()
+    _render_social_buttons()
 
 
 def forgot_password_view():
@@ -451,8 +475,8 @@ def forgot_password_view():
                     st.error("User with specified UserID and Email not found ❌")
                     return
 
-                if user.get("auth_provider") == "google":
-                    st.error("This account uses Google login and cannot be reset here ❌")
+                if user.get("auth_provider") in ["google", "github", "guest"]:
+                    st.error("This account uses social/guest login and cannot be reset with a password ❌")
                     return
 
                 # Generate and send OTP
@@ -560,11 +584,20 @@ def forgot_password_view():
 # AUTH RENDER
 # =========================================================
 def render_auth():
-    handle_google_callback()
+    handle_github_callback()
     
     # Intercept query parameters for navigation/error handling
     action = st.query_params.get("action")
-    if action == "forgot_password":
+    if action == "guest_login":
+        st.session_state.logged_in = True
+        st.session_state.user = {
+            "email": "demo.analyst@apex.io",
+            "userid": "Guest Analyst",
+            "auth_provider": "guest"
+        }
+        st.query_params.clear()
+        st.rerun()
+    elif action == "forgot_password":
         st.session_state.auth_tab = "forgot_password"
         # Reset OTP states when entering the screen fresh
         for k in ["forgot_otp_code", "forgot_otp_expiry", "forgot_otp_verified", "forgot_otp_sent", "forgot_reset_email"]:
@@ -575,8 +608,8 @@ def render_auth():
         st.query_params.clear()
 
     error = st.query_params.get("error")
-    if error == "google_not_configured":
-        st.error("❌ Google Login is not configured. Please add `google_oauth` credentials to your Streamlit secrets.")
+    if error == "github_not_configured":
+        st.info("ℹ️ GitHub login is optional. Use 'Explore as Guest' for instant 1-click access or enter your UserID & Password.")
         st.query_params.clear()
 
     st.sidebar.empty()
@@ -768,30 +801,57 @@ div[data-testid="stButton"] > button:focus {
         transform: translateY(-2px);
     }
 
-    /* ---------- GOOGLE ---------- */
-    .google-btn {
+    /* ---------- GITHUB & GUEST BUTTONS ---------- */
+    .github-btn {
         width: 100% !important;
         height: 48px !important;
         border-radius: 12px !important;
-        background: #ffffff !important;
-        color: #000000 !important;
+        background: #24292e !important;
+        color: #ffffff !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 10px !important;
         font-family: 'Space Grotesk', -apple-system, sans-serif !important;
         font-weight: 700 !important;
         font-size: 15px !important;
         letter-spacing: 0.02em !important;
         cursor: pointer !important;
-        border: 1px solid #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.22) !important;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
         box-sizing: border-box !important;
     }
-    .google-btn:hover {
-        background: #e4e4e7 !important;
-        box-shadow: 0 0 25px rgba(255, 255, 255, 0.35) !important;
+    .github-btn:hover {
+        background: #2f363d !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.25) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .guest-btn {
+        width: 100% !important;
+        height: 46px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.04) !important;
+        color: #e2e8f0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        font-family: 'Space Grotesk', -apple-system, sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        letter-spacing: 0.02em !important;
+        cursor: pointer !important;
+        border: 1px dashed rgba(255, 255, 255, 0.28) !important;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-sizing: border-box !important;
+    }
+    .guest-btn:hover {
+        background: rgba(56, 189, 248, 0.12) !important;
+        border-color: #38bdf8 !important;
+        color: #38bdf8 !important;
+        box-shadow: 0 0 18px rgba(56, 189, 248, 0.25) !important;
         transform: translateY(-2px) !important;
     }
 
