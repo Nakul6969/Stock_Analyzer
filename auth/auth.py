@@ -1102,6 +1102,15 @@ div[data-testid="stTextInput"] [data-baseweb="input"]{
     left, center, right = st.columns([3.5, 5.0, 3.5])
 
     with center:
+        db_healthy, db_err = check_db_health()
+        if not db_healthy:
+            st.warning(
+                "⚠️ **MongoDB Atlas connection is currently unavailable.**\n\n"
+                "- **Streamlit Cloud**: Verify that `MONGO_URI` is set correctly in **App settings → Secrets**.\n"
+                "- **MongoDB Atlas**: Ensure your cluster is active and Network Access IP list includes `0.0.0.0/0`.\n\n"
+                "👉 *You can click **'⚡ Explore as Guest (Demo Mode)'** below to preview and use the platform.*"
+            )
+
         # ---------- TAB BUTTONS ----------
         c1, c2 = st.columns(2)
 
